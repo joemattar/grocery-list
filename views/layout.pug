@@ -2,6 +2,25 @@ doctype html
 html
   head
     title= webpage_title
+    script(src="https://accounts.google.com/gsi/client" async defer)
     link(rel='stylesheet', href='/stylesheets/style.css')
   body
-    block content
+    header.header
+      div.header-container
+        div=title
+        .google-container
+          if user === undefined
+            a.google-a(href="/auth/google")
+              button(type="button" class="login-with-google-btn") Google Sign In
+          else
+            div.logged-in
+              img(src=user.image)
+              div=user.firstName
+            a.logout(href="/auth/logout") Log Out
+          
+    div.main
+      block content
+    footer.footer
+      div JOEMATTAR
+      a(href="https://github.com/joemattar" target="_blank" rel="noreferrer")
+        img(src="/images/github_logo_white.png" alt="Github Logo")

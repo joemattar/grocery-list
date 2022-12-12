@@ -1,5 +1,8 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
+  p Welcome to the Grocery List App
+  if user === undefined
+    p Please Sign In To Access Your Lists
+  else
+    a(href="/dashboard") Go To Lists

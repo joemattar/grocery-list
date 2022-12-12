@@ -3,33 +3,58 @@ const express = require("express");
 const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
+const nocache = require("nocache");
+const session = require("express-session");
+const MongoStore = require("connect-mongo");
+const passport = require("passport");
+// Initialize database connection
+require("./controllers/database");
+// Passport - pass the passport variable into the passport.js controller to be used in the middleware
+require("./controllers/passport")(passport);
+
 require("dotenv").config();
 
 const indexRouter = require("./routes/index");
-const usersRouter = require("./routes/users");
+const authRouter = require("./routes/auth");
+const dashboardRouter = require("./routes/dashboard");
 
 const app = express();
 
-// MongoDB mongoose
-const mongoose = require("mongoose");
-mongoose.set("strictQuery", false);
-const mongoDb = process.env.MONGODB_URI;
-mongoose.connect(mongoDb, { useUnifiedTopology: true, useNewUrlParser: true });
-const db = mongoose.connection;
-db.on("error", console.error.bind(console, "mongo connection error"));
+// No cache clear the cache on each http request - solves the back space button issue
+app.use(nocache());
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "pug");
 
+// Session
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    store: MongoStore.create({ mongoUrl: process.env.MONGODB_URI }),
+  })
+);
+
+// Passport middleware
+app.use(passport.initialize());
+app.use(passport.session());
+
+// Logging ~ morgan
 app.use(logger("dev"));
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+
+// Static folder ~ contains all puplic assets
 app.use(express.static(path.join(__dirname, "public")));
 
+// Routing
 app.use("/", indexRouter);
-app.use("/users", usersRouter);
+app.use("/auth", authRouter);
+app.use("/dashboard", dashboardRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
