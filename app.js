@@ -7,7 +7,7 @@ const nocache = require("nocache");
 const session = require("express-session");
 const MongoStore = require("connect-mongo");
 const passport = require("passport");
-// Initialize database connection
+// Initialize database connection from database controller
 require("./controllers/database");
 // Passport - pass the passport variable into the passport.js controller to be used in the middleware
 require("./controllers/passport")(passport);
