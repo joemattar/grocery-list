@@ -8,7 +8,7 @@ router.get(
   "/google",
   passport.authenticate("google", {
     scope: ["email", "profile"],
-    // The below triggers the Google Sign In Accounts selexction on Sign In
+    // The below triggers the Google Sign In Accounts selection on Sign In
     prompt: "select_account",
   })
 );
