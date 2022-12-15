@@ -182,12 +182,22 @@ text-decoration: none;
   border-radius: 1rem;
 
   display: grid;
-  grid-template-columns: 1fr auto auto;
-  gap: 0.5rem;
+  grid-template-columns: 1fr auto auto auto;
+  align-items: center;
+  gap: 1.5rem;
 
   padding: 0.5rem;
 
   width: Calc(100% - 2rem);
+}
+
+.main .lists-container .list-container a {
+  display: grid;
+  place-content: center;
+}
+
+.main .lists-container .list-container img {
+  height: 1.25rem;
 }
 
 .main .form-container {

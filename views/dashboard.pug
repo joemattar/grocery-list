@@ -8,8 +8,11 @@ block content
     else
       each list in user_lists
         div.list-container
-          a(href=list.url) #{list.name}
+          p #{list.name}
+          a(href=`/dashboard/list/${list.id}/delete`)
+            img(src="/images/remove-button.png" alt="Delete List")
           a(href=`/dashboard/list/${list.id}/edit`) Edit
-          a(href=`/dashboard/list/${list.id}/delete`) Delete
+          a(href=list.url)
+            img(src="/images/next.png" alt="Select List")
     
   
