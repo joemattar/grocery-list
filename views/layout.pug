@@ -1,13 +1,14 @@
 doctype html
 html
   head
-    title= webpage_title
+    title=title
     script(src="https://accounts.google.com/gsi/client" async defer)
     link(rel='stylesheet', href='/stylesheets/style.css')
   body
     header.header
       div.header-container
-        div=title
+        a(href="/dashboard")
+          div GROCERY LIST
         .google-container
           if user === undefined
             a.google-a(href="/auth/google")

@@ -1,0 +1,18 @@
+extends layout
+
+block content
+  p Add or Update Item
+
+  
+
+  form(method='POST' action='')
+    p For List ID: #{list_id}
+    div.form-group
+      label(for='name') Item Name:
+      input#name.form-control(type='text' name='name' value=(undefined===item ? '' : item.name))
+    button.btn.btn-primary(type='submit') Submit
+
+  if errors
+   ul
+    for error in errors
+     li!= error.msg

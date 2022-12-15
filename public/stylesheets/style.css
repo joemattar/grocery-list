@@ -1,5 +1,10 @@
 body {
 
+  display: grid;
+  grid-template-rows: 3rem 1fr 3rem;
+  align-items: center;
+  justify-content: center;
+
   font-family: "Lucida Grande", Helvetica, Arial, sans-serif;
   font-size: 1rem;
 
@@ -8,22 +13,37 @@ body {
   padding: 0;
 }
 
+p {
+  margin: 0;
+  padding: 0;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+}
+
 .header {
   background-color: #bd141b;
 
   color: white;
 
-  font-family: inherit;
-
   display: flex;
   align-items: center;
   justify-content: center;
 
+  font-family: inherit;
   font-size: 2rem;
 
   padding: 0.5rem 0;
 
-  width: 100%;
+  width: 100vw;
+}
+
+@media (max-width: 600px) {
+  .header {
+    font-size: 5.3vw;
+  }
 }
 
 .header-container {
@@ -34,6 +54,12 @@ body {
   padding: 0 2rem;
 
   width: min(100%, 800px);
+  
+}
+
+.header-container a {
+color: inherit;
+text-decoration: none;
   
 }
 
@@ -128,13 +154,61 @@ body {
 }
 
 .main {
+  background-color: #c8dafc;
+
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-self: center;
+  gap: 0.5rem;
 
-  margin: 2rem 0;
+  margin: 1rem 0;
+
+  width: min(100vw, 800px);
 }
 
+.main .list-header {
+  background-color: aquamarine;
+
+  border-radius: 1rem;
+
+  padding: 0.5rem;
+
+  width: Calc(100% - 2rem);
+}
+
+.main .list-header .list-title-container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  font-size: 1.25rem;
+}
+
+.main .list-header .list-title-container a {
+  display: grid;
+  place-content: center;
+}
+
+.main .list-header .list-title-container img {
+  height: 1.5rem;
+}
+
+.main .list-items-container {
+  background-color: bisque;
+
+  border-radius: 1rem;
+
+  padding: 0.5rem;
+
+  width: Calc(100% - 2rem);
+}
+
+.main .list-items-container .list-item-container {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: 0.5rem;
+}
 
 .footer {
   background-color: #bd141b;

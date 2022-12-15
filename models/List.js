@@ -8,4 +8,10 @@ const ListSchema = new Schema({
   users: [{ type: Schema.Types.ObjectId, ref: "User", required: true }], // reference array to the users
 });
 
+// Virtual for list's URL
+ListSchema.virtual("url").get(function () {
+  // We don't use an arrow function as we'll need the this object
+  return `/dashboard/list/${this._id}`;
+});
+
 module.exports = mongoose.model("List", ListSchema);
