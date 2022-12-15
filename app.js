@@ -44,8 +44,14 @@ app.use(passport.session());
 // Logging ~ morgan
 app.use(logger("dev"));
 
+// Parse the HTML form
+// This will help us parse an HTTP POST method request from an HTML document.
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
+// Set the Cookie-parser
+// Define Cookie-parser usage so that the server can
+// access the necessary option to save, read and access a cookie.
 app.use(cookieParser());
 
 // Static folder ~ contains all puplic assets

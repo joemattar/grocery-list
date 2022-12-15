@@ -1,21 +1,29 @@
 const List = require("../models/List");
-const User = require("../models/User");
 const Item = require("../models/Item");
 
 const async = require("async");
 const { body, validationResult } = require("express-validator");
 
-// Display item create form on GET.
+// Dashboard create LIST ITEM page on GET
 module.exports.item_create_get = (req, res, next) => {
-  // Successful, so render.
-  res.render("item_form", {
-    title: "Add Item - Grocery List App",
-    user: req.user,
-    list_id: req.params.id,
+  List.findOne({ _id: req.params.id, users: req.user.id }).exec(function (
+    err,
+    list
+  ) {
+    if (err) {
+      next(err);
+    }
+    // Successful, so render.
+    res.render("item_form", {
+      title: "Add Item - Grocery List App",
+      page_title: "Add Item",
+      user: req.user,
+      list,
+    });
   });
 };
 
-// Handle item create on POST.
+// Dashboard create LIST ITEM page on POST
 exports.item_create_post = [
   // Validate and sanitize fields.
   body("name", "Item name must be specified").trim().isLength({ min: 1 }),
@@ -34,6 +42,7 @@ exports.item_create_post = [
       // Render form again with sanitized values and error messages.
       res.render("item_form", {
         title: "Update Item - Grocery List App",
+        page_title: "Add Item",
         user: req.user,
         item,
         errors: errors.array(),
@@ -56,23 +65,32 @@ exports.item_create_post = [
   },
 ];
 
-// Display item edit form on GET.
+// Dashboard edit LIST ITEM page on GET
 module.exports.item_edit_get = (req, res, next) => {
   Item.findOne({ _id: req.params.id }).exec(function (err, item) {
     if (err) {
       return next(err);
     }
-    // Successful, so render.
-    res.render("item_form", {
-      title: "Edit Item - Grocery List App",
-      user: req.user,
-      item,
-      list_id: item.list,
+    List.findOne({ _id: item.list, users: req.user.id }).exec(function (
+      err,
+      list
+    ) {
+      if (err) {
+        return next(err);
+      }
+      // Successful, so render.
+      res.render("item_form", {
+        title: "Edit Item - Grocery List App",
+        page_title: "Edit Item",
+        user: req.user,
+        item: item,
+        list: list,
+      });
     });
   });
 };
 
-// Display item edit form on POST.
+// Dashboard edit LIST ITEM page on POST
 module.exports.item_edit_post = [
   // Validate and sanitize fields.
   body("name", "Item name must be specified").trim().isLength({ min: 1 }),
@@ -80,6 +98,7 @@ module.exports.item_edit_post = [
   (req, res, next) => {
     // Extract the validation errors from a request.
     const errors = validationResult(req);
+    // Find the item in db
     Item.findOne({ _id: req.params.id }).exec(function (err, selected_item) {
       if (err) {
         next(err);
@@ -94,7 +113,8 @@ module.exports.item_edit_post = [
         // There are errors.
         // Render form again with sanitized values and error messages.
         res.render("item_form", {
-          title: "Update Item - Grocery List App",
+          title: "Add Item - Grocery List App",
+          page_title: "Add Item",
           user: req.user,
           item,
           errors: errors.array(),
@@ -114,19 +134,58 @@ module.exports.item_edit_post = [
   },
 ];
 
-// Handle item delete on GET.
+// Dashboard delete LIST ITEM page on GET
 module.exports.item_delete_get = (req, res, next) => {
   Item.findOne({ _id: req.params.id }).exec(function (err, item) {
     if (err) {
       return next(err);
     }
-    const list_url = `/dashboard/list/${item.list}`;
-    Item.deleteOne({ _id: req.params.id }).exec(function (err) {
+    List.findOne({ _id: item.list, users: req.user.id }).exec(function (
+      err,
+      list
+    ) {
       if (err) {
         return next(err);
       }
-      // Success - go to list
-      res.redirect(list_url);
+      Item.deleteOne({ _id: req.params.id }).exec(function (err) {
+        if (err) {
+          return next(err);
+        }
+        // Success - go to list
+        res.redirect(list.url);
+      });
     });
   });
+};
+
+// Dashboard toggle LIST ITEM status on GET
+module.exports.item_toggle_get = (req, res, next) => {
+  Item.findOne({ _id: req.params.id })
+    .populate("list")
+    .exec(function (err, item) {
+      if (err) {
+        next(err);
+      }
+      if (item.list.users.includes(req.user.id)) {
+        if (item.status === "to-do") {
+          Item.updateOne({ _id: req.params.id }, { status: "done" }).exec(
+            function (err) {
+              if (err) {
+                next(err);
+              }
+              res.redirect(item.list.url);
+            }
+          );
+        } else if (item.status === "done") {
+          Item.updateOne({ _id: req.params.id }, { status: "to-do" }).exec(
+            function (err) {
+              if (err) {
+                next(err);
+              }
+              res.redirect(item.list.url);
+            }
+          );
+        }
+      }
+    });
 };

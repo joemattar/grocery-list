@@ -1,15 +1,16 @@
 extends layout
 
 block content
-  p Create or Update List
-
-  form(method='POST' action='')
-    div.form-group
-      label(for='name') List Name:
+  div.form-container
+    strong
+      p=page_title
+    form(method='POST' action='')
+      label(for='name') Name:
       input#name.form-control(type='text' name='name' value=(undefined===list ? '' : list.name))
-    button.btn.btn-primary(type='submit') Submit
-
-  if errors
-   ul
-    for error in errors
-     li!= error.msg
+      button.btn.btn-primary(type='submit') Submit
+    a(href="/dashboard")
+      button Cancel
+    if errors
+      ul.errors
+        for error in errors
+          li!= error.msg

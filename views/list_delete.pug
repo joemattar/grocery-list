@@ -1,0 +1,31 @@
+extends layout
+
+block content
+  if user.id === list.owner.id
+    div.form-container
+      strong
+        p=page_title
+      p Are you sure you want to delete list "#{list.name}" ?
+      p The list contains #{list_items.length} elements!
+      if list_items.length > 0
+        p All list elements will be deleted.
+      form(method='POST' action='')
+        button.btn.btn-primary(type='submit') Delete
+      a(href="/dashboard")
+        button Cancel
+      if errors
+        ul
+          for error in errors
+            li!= error.msg
+  else
+    div.form-container
+      strong
+        p=page_title
+      p You cannot delete list "#{list.name}" ?
+      p You are not the list owner.
+      a(href="/dashboard")
+        button Cancel
+      if errors
+        ul
+          for error in errors
+            li!= error.msg

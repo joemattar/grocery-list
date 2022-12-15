@@ -154,7 +154,7 @@ text-decoration: none;
 }
 
 .main {
-  background-color: #c8dafc;
+  /* background-color: #c8dafc; */
 
   display: flex;
   flex-direction: column;
@@ -167,8 +167,60 @@ text-decoration: none;
   width: min(100vw, 800px);
 }
 
+.main .lists-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+
+  width: 100%;
+}
+
+.main .lists-container .list-container {
+  background-color: bisque;
+
+  border-radius: 1rem;
+
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: 0.5rem;
+
+  padding: 0.5rem;
+
+  width: Calc(100% - 2rem);
+}
+
+.main .form-container {
+  background-color: bisque;
+
+  border-radius: 1rem;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+
+  padding: 0.5rem;
+
+  width: Calc(100% - 2rem);
+}
+
+.main .form-container form{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.main .form-container input{
+  border-radius: 0.5rem;
+  font-family: inherit;
+
+  padding: 0.25rem;
+}
+
 .main .list-header {
-  background-color: aquamarine;
+  background-color: bisque;
 
   border-radius: 1rem;
 
@@ -178,7 +230,8 @@ text-decoration: none;
 }
 
 .main .list-header .list-title-container {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1rem 1fr auto;
   align-items: center;
   gap: 0.5rem;
 
@@ -194,20 +247,57 @@ text-decoration: none;
   height: 1.5rem;
 }
 
+.main .list-header .list-users {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  font-size: 1.25rem;
+}
+
+.main .list-header .list-title-container img.profile-pic{
+  border-radius: 0.5rem;
+}
+
+
 .main .list-items-container {
-  background-color: bisque;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+
+  width: 100%;
+}
+
+.main .list-items-container .list-item-container {
+  background-color: #d0f4c1;
 
   border-radius: 1rem;
+
+  display: grid;
+  grid-template-columns: 1fr auto auto auto;
+  gap: 1.5rem;
 
   padding: 0.5rem;
 
   width: Calc(100% - 2rem);
 }
 
-.main .list-items-container .list-item-container {
+.main .list-items-container .list-item-container.to-do {
+  background-color: #fbd4d1;
+}
+
+.main .list-items-container .list-item-container a {
   display: grid;
-  grid-template-columns: 1fr auto auto;
-  gap: 0.5rem;
+  place-content: center;
+}
+
+.main .list-items-container .list-item-container img {
+  height: 1.25rem;
+}
+
+.errors {
+  color: red;
 }
 
 .footer {

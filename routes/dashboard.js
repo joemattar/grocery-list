@@ -4,23 +4,39 @@ const isAuthorized = require("../controllers/authentication");
 const listController = require("../controllers/listController");
 const itemController = require("../controllers/itemController");
 
-// Dashboard user grocery lists page
+// Dashboard display USER LISTS page on GET
 // Route GET /dashboard
 router.get("/", isAuthorized, listController.user_lists);
 
-// Dashboard user create list page
+// Dashboard create USER LIST page on GET
 // Route GET /dashboard/list/create
 router.get("/list/create", isAuthorized, listController.list_create_get);
 
-// Dashboard user create list page
+// Dashboard create USER LIST page on POST
 // Route POST /dashboard/list/create
 router.post("/list/create", isAuthorized, listController.list_create_post);
 
-// Dashboard user list details page
+// Dashboard display USER LIST details page on GET
 // Route GET /dashboard/list/:id
 router.get("/list/:id", isAuthorized, listController.list_detail);
 
-// Dashboard user create list item page
+// Dashboard edit USER LIST page on GET
+// Route GET /dashboard/list/:id/edit
+router.get("/list/:id/edit", isAuthorized, listController.list_edit_get);
+
+// Dashboard edit USER LIST page on POST
+// Route POST /dashboard/list/:id/edit
+router.post("/list/:id/edit", isAuthorized, listController.list_edit_post);
+
+// Dashboard delete USER LIST page on GET
+// Route GET /dashboard/list/:id/delete
+router.get("/list/:id/delete", isAuthorized, listController.list_delete_get);
+
+// Dashboard delete USER LIST page on POST
+// Route POST /dashboard/list/:id/delete
+router.post("/list/:id/delete", isAuthorized, listController.list_delete_post);
+
+// Dashboard create LIST ITEM page on GET
 // Route GET /dashboard/list/:id/item/create
 router.get(
   "/list/:id/item/create",
@@ -28,7 +44,7 @@ router.get(
   itemController.item_create_get
 );
 
-// Dashboard user create list item page
+// Dashboard create LIST ITEM page on POST
 // Route POST /dashboard/list/:id/item/create
 router.post(
   "/list/:id/item/create",
@@ -36,16 +52,20 @@ router.post(
   itemController.item_create_post
 );
 
-// Dashboard user edit list item page
+// Dashboard edit LIST ITEM page on GET
 // Route GET /dashboard/item/:id/edit
 router.get("/item/:id/edit", isAuthorized, itemController.item_edit_get);
 
-// Dashboard user edit list item page
+// Dashboard edit LIST ITEM page on POST
 // Route POST /dashboard/item/:id/edit
 router.post("/item/:id/edit", isAuthorized, itemController.item_edit_post);
 
-// Dashboard user delete list item page
+// Dashboard delete LIST ITEM page on GET
 // Route GET /dashboard/item/:id/delete
 router.get("/item/:id/delete", isAuthorized, itemController.item_delete_get);
+
+// Dashboard toggle LIST ITEM status on GET
+// Route GET /dashboard/item/:id/toggle
+router.get("/item/:id/toggle", isAuthorized, itemController.item_toggle_get);
 
 module.exports = router;

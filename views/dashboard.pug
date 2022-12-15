@@ -2,7 +2,14 @@ extends layout
 
 block content
   a(href="/dashboard/list/create") Create List
-  p Your Lists:
-  each list in user_lists
-    a(href=list.url) #{list.name}
+  div.lists-container
+    if user_lists.length===0
+      p User has no lists
+    else
+      each list in user_lists
+        div.list-container
+          a(href=list.url) #{list.name}
+          a(href=`/dashboard/list/${list.id}/edit`) Edit
+          a(href=`/dashboard/list/${list.id}/delete`) Delete
+    
   

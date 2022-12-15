@@ -6,11 +6,11 @@ block content
       a(href="/dashboard")
         img(src="/images/arrow-left-circle.svg" alt="Left Back Arrow")
       p #{list.name}
-    p List Owner:
-    p #{list.owner.displayName}
-    p List Users:
-    each user in list.users
-      p=user.displayName
+      div.list-users
+        img(src=list.owner.image alt="owner photo" class="profile-pic")
+        img(src="/images/users.svg" alt="users sharing")
+        each user in list.users
+          img(src=user.image alt="user photo" class="profile-pic")
   div.list-add-container
     a(href=`/dashboard/list/${list.id}/item/create`) Add Item
   div.list-items-container
@@ -18,8 +18,18 @@ block content
       p No Items in list
     else
       each item in list_items
-        div.list-item-container
+        +listItemContainer(item)
           p=item.name
+          a(href=`/dashboard/item/${item.id}/delete`)
+            img(src="/images/remove-button.png" alt="Delete List Item")
           a(href=`/dashboard/item/${item.id}/edit`) Edit
-          a(href=`/dashboard/item/${item.id}/delete`) Delete
-    
+          a(href=`/dashboard/item/${item.id}/toggle`)
+            img(src="/images/next.png" alt="Toggle Item Status")
+
+mixin listItemContainer(xxx)
+  if xxx.status === "to-do"
+    div.list-item-container.to-do
+      block
+  else
+    div.list-item-container
+      block
