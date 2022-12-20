@@ -1,7 +1,7 @@
 body {
 
   display: grid;
-  grid-template-rows: 3rem 1fr 3rem;
+  grid-template-rows: 3rem 1fr 2rem;
   align-items: center;
   justify-content: center;
 
@@ -154,8 +154,6 @@ text-decoration: none;
 }
 
 .main {
-  /* background-color: #c8dafc; */
-
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -305,6 +303,77 @@ text-decoration: none;
 .main .list-items-container .list-item-container img {
   height: 1.25rem;
 }
+
+.main .owner-container {
+  background-color: #d0f4c1;
+
+  border-radius: 1rem;
+
+  display: grid;
+  grid-template-columns: auto auto auto 1fr;
+  align-items: center;
+  gap: 1.5rem;
+
+  padding: 0.5rem;
+
+  width: Calc(100% - 2rem);
+}
+
+.main .owner-container img.profile-pic {
+  border-radius: 0.5rem;
+
+  height: 1.5rem;
+}
+
+.main .users-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+
+  width: 100%;
+}
+
+.main .users-container .user-container {
+  background-color: #d0f4c1;
+
+  border-radius: 1rem;
+
+  display: grid;
+  grid-template-columns: auto auto auto 1fr;
+  align-items: center;
+  gap: 1.5rem;
+
+  padding: 0.5rem;
+
+  width: Calc(100% - 2rem);
+}
+
+.main .users-container .user-container img.profile-pic {
+  border-radius: 0.5rem;
+
+  height: 1.5rem;
+}
+
+.main .pending-invites-container {
+  background-color: #fbd4d1;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+
+  width: 100%;
+}
+
+.align-right {
+  text-align: right;
+}
+
+hr {
+  width: 100%;
+}
+
 
 .errors {
   color: red;

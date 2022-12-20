@@ -1,7 +1,6 @@
 const List = require("../models/List");
 const Item = require("../models/Item");
 
-const async = require("async");
 const { body, validationResult } = require("express-validator");
 
 // Dashboard create LIST ITEM page on GET

@@ -1,0 +1,30 @@
+extends layout
+
+block content
+  p Share List "#{list.name}"
+  form(method='POST' action='' class="add-user-container")
+    label(for="email") Add user by email:
+    input(type="text" name="email")
+    button.btn.btn-primary(type='submit') Add
+  if errors
+    ul.errors
+      for error in errors
+        p=`Error is: ${error.msg}`
+  p Owner
+  div.owner-container
+    img(src=list.owner.image alt="owner photo" class="profile-pic")
+    p #{list.owner.displayName}
+    p ( #{list.owner.email} )
+    p.align-right (Cannot Remove)
+  p Users
+  div.users-container
+    each user in list.users
+      if user.id !== list.owner.id
+        div.user-container
+          img(src=user.image alt="user photo" class="profile-pic")
+          p #{user.displayName}
+          p ( #{user.email} )
+          a.align-right (Remove Button)
+  p Pending Invites
+  div.pending-invites-container
+    p No Pending Invites

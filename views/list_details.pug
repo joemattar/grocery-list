@@ -8,9 +8,10 @@ block content
       p #{list.name}
       div.list-users
         img(src=list.owner.image alt="owner photo" class="profile-pic")
+        a(href=`/dashboard/list/${list.id}/share`) SHARE
         img(src="/images/users.svg" alt="users sharing")
-        each user in list.users
-          img(src=user.image alt="user photo" class="profile-pic")
+          
+
   div.list-add-container
     a(href=`/dashboard/list/${list.id}/item/create`) Add Item
   div.list-items-container

@@ -1,12 +1,18 @@
 const express = require("express");
 const router = express.Router();
 const isAuthorized = require("../controllers/authentication");
+const invitationController = require("../controllers/invitationController");
 const listController = require("../controllers/listController");
 const itemController = require("../controllers/itemController");
 
 // Dashboard display USER LISTS page on GET
 // Route GET /dashboard
-router.get("/", isAuthorized, listController.user_lists);
+router.get(
+  "/",
+  isAuthorized,
+  invitationController.resolve_pending_invitations,
+  listController.user_lists
+);
 
 // Dashboard create USER LIST page on GET
 // Route GET /dashboard/list/create
@@ -35,6 +41,16 @@ router.get("/list/:id/delete", isAuthorized, listController.list_delete_get);
 // Dashboard delete USER LIST page on POST
 // Route POST /dashboard/list/:id/delete
 router.post("/list/:id/delete", isAuthorized, listController.list_delete_post);
+
+// Dashboard display USER LIST SHARE page on GET
+// Route GET /dashboard/list/:id/share
+router.get("/list/:id/share", isAuthorized, listController.list_share_get);
+
+// Dashboard add LIST USER page on POST
+// Route GET /dashboard/list/:id/share
+router.post("/list/:id/share", isAuthorized, listController.list_add_user);
+
+// Dashboard remove LIST USER page on GET
 
 // Dashboard create LIST ITEM page on GET
 // Route GET /dashboard/list/:id/item/create
