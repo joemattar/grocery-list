@@ -19,7 +19,7 @@
 - Items are editable, and deletable
 - If an item is selected, its status its toggled between ("to-do" and "done")
 
-### MAde with:
+### Made with:
 - Node
 - Express
 - Javascript
