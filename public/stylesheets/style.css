@@ -310,7 +310,7 @@ text-decoration: none;
   border-radius: 1rem;
 
   display: grid;
-  grid-template-columns: auto auto auto 1fr;
+  grid-template-columns: auto auto 1fr auto;
   align-items: center;
   gap: 1.5rem;
 
@@ -340,13 +340,23 @@ text-decoration: none;
   border-radius: 1rem;
 
   display: grid;
-  grid-template-columns: auto auto auto 1fr;
+  grid-template-columns: auto auto 1fr auto;
   align-items: center;
   gap: 1.5rem;
 
   padding: 0.5rem;
 
   width: Calc(100% - 2rem);
+}
+
+.main .users-container .user-container a {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.main .users-container .user-container img {
+  height: 1.25rem;
 }
 
 .main .users-container .user-container img.profile-pic {

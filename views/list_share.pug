@@ -9,7 +9,10 @@ block content
   if errors
     ul.errors
       for error in errors
-        p=`Error is: ${error.msg}`
+        p=error.msg
+  if error
+    ul.errors
+      p=error
   p Owner
   div.owner-container
     img(src=list.owner.image alt="owner photo" class="profile-pic")
@@ -24,7 +27,8 @@ block content
           img(src=user.image alt="user photo" class="profile-pic")
           p #{user.displayName}
           p ( #{user.email} )
-          a.align-right (Remove Button)
+          a(href=`/dashboard/list/${list.id}/user/${user.id}/remove` class="align-right")
+            img(src="/images/remove-button.png" alt="Remove List User")
   p Pending Invites
   div.pending-invites-container
     p No Pending Invites

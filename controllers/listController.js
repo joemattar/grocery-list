@@ -261,7 +261,7 @@ exports.list_share_get = (req, res, next) => {
     });
 };
 
-// Dashboard add REGISTERED LIST USER on POST
+// Dashboard add LIST USER on POST
 exports.list_add_user = [
   // Validate and sanitize fields.
   body("email")
@@ -295,11 +295,13 @@ exports.list_add_user = [
       // If no validation errors
       async.parallel(
         {
+          // Try to find if user email exist in registered users list
           user(callback) {
             User.findOne({ email: req.body.email }).exec(callback);
           },
           list(callback) {
             List.findOne({ _id: req.params.id, users: req.user.id })
+              .populate("owner")
               .populate("users")
               .exec(callback);
           },
@@ -309,17 +311,39 @@ exports.list_add_user = [
             next(err);
           }
           console.log(results.user);
+          // User is already registered in database
           if (results.user) {
+            // Check if user is already in sharing list
             for (let user of results.list.users) {
+              // User is in list
               if (user.id === results.user.id) {
-                console.log("USER IS REGISTERED - BUT ALREADY IN LIST");
-                next();
-                return;
+                try {
+                  throw new Error("User already has access to list");
+                } catch (err) {
+                  // Re-Render the list share form with errors
+                  res.render("list_share", {
+                    title: "Share List - Grocery List App",
+                    page_title: "Share List",
+                    user: req.user,
+                    list: results.list,
+                    error: err,
+                  });
+                  return;
+                }
               }
             }
+            // User is not in sharing list
             console.log("USER IS REGISTERED - CAN BE ADDED TO THIS LIST");
-            // List.updateOne({ _id: req.params.id, users: req.user.id }, { $push: {} });
-            next();
+            List.updateOne(
+              { _id: req.params.id, users: req.user.id },
+              { $push: { users: results.user._id } }
+            ).exec(function (err) {
+              if (err) {
+                next(err);
+              }
+              // Redirects to the list share page
+              res.redirect(`${results.list.url}/share`);
+            });
           } else {
             console.log("USER IS NOT REGISTERED");
 
@@ -331,3 +355,16 @@ exports.list_add_user = [
     }
   },
 ];
+
+exports.list_remove_user = (req, res, next) => {
+  List.updateOne(
+    { _id: req.params.listId, users: req.user.id },
+    { $pull: { users: req.params.userId } }
+  ).exec(function (err) {
+    if (err) {
+      next(err);
+    }
+    // Redirects to the list share page
+    res.redirect(`/dashboard/list/${req.params.listId}/share`);
+  });
+};

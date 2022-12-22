@@ -47,10 +47,16 @@ router.post("/list/:id/delete", isAuthorized, listController.list_delete_post);
 router.get("/list/:id/share", isAuthorized, listController.list_share_get);
 
 // Dashboard add LIST USER page on POST
-// Route GET /dashboard/list/:id/share
+// Route POST /dashboard/list/:id/share
 router.post("/list/:id/share", isAuthorized, listController.list_add_user);
 
 // Dashboard remove LIST USER page on GET
+// Route GET /dashboard/list/:listId/user/:userId/remove
+router.get(
+  "/list/:listId/user/:userId/remove",
+  isAuthorized,
+  listController.list_remove_user
+);
 
 // Dashboard create LIST ITEM page on GET
 // Route GET /dashboard/list/:id/item/create
