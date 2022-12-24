@@ -310,7 +310,6 @@ exports.list_add_user = [
           if (err) {
             next(err);
           }
-          console.log(results.user);
           // User is already registered in database
           if (results.user) {
             // Check if user is already in sharing list
@@ -333,7 +332,6 @@ exports.list_add_user = [
               }
             }
             // User is not in sharing list
-            console.log("USER IS REGISTERED - CAN BE ADDED TO THIS LIST");
             List.updateOne(
               { _id: req.params.id, users: req.user.id },
               { $push: { users: results.user._id } }
@@ -346,9 +344,7 @@ exports.list_add_user = [
             });
           } else {
             console.log("USER IS NOT REGISTERED");
-
-            // TRIGGER ADD invitation middleware
-            next();
+            invitationController.list_add_invitation(req, res, next);
           }
         }
       );
@@ -356,6 +352,7 @@ exports.list_add_user = [
   },
 ];
 
+// Dashboard remove LIST USER page on GET
 exports.list_remove_user = (req, res, next) => {
   List.updateOne(
     { _id: req.params.listId, users: req.user.id },
