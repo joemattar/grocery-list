@@ -16,7 +16,10 @@ html
               button(type="button" class="login-with-google-btn") Google Sign In
           else
             div.logged-in
-              img(src=user.image alt="user photo")
+              if user.image
+                img(src=user.image alt="user photo")
+              else
+                img(src="/images/user.svg" alt="user photo")
               div=user.firstName
             a.logout(href="/auth/logout") Log Out
           

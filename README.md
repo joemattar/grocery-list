@@ -13,11 +13,22 @@
 
 ### List Items Page:
 - Shows List Name
-- Shows Owner Avatar & Users Avatars
-- (Sharing logic to be implemented)
+- Shows Owner Avatar & Sharing Link
 - Shows list items, sorted alphabetically and by status ("to-do" or "done")
 - Items are editable, and deletable
 - If an item is selected, its status its toggled between ("to-do" and "done")
+
+### List Sharing:
+- Shows name of list to share
+- Form to add users by email
+- Registered users are automatically added to list users
+- Unregistered users are added to db as invitations
+- Shows list owner info
+- Shows list users info
+- Users are removable
+- Shows list invitations
+- Invitations are removable
+- Upon invited user first registration, invitations are resolved into list users
 
 ### Made with:
 - Node

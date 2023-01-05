@@ -1,0 +1,51 @@
+extends layout
+
+block content
+  div.share-container
+    a(href=`/dashboard/list/${list.id}` class="back-arrow")
+      img(src="/images/arrow-left-circle.svg" alt="Left Back Arrow")
+    p Share List "#{list.name}"
+    form(method='POST' action='' class="add-user-container")
+      label(for="email") Add email:
+      input(type="text" name="email")
+      button.btn.btn-primary(type='submit') Add
+  if errors
+    ul.errors
+      for error in errors
+        p=error.msg
+  if error
+    ul.errors
+      p=error
+  p Owner
+  div.owner-container
+    if list.owner.image
+      img(src=list.owner.image alt="owner photo" class="profile-pic")
+    else
+      img(src="/images/user.svg" alt="owner photo" class="profile-pic")
+    p #{list.owner.displayName}
+    p ( #{list.owner.email} )
+  p Users
+  div.users-container
+    each user in list.users
+      if user.id !== list.owner.id
+        div.user-container
+          if user.image
+            img(src=user.image alt="user photo" class="profile-pic")
+          else
+            img(src="/images/user.svg" alt="user photo" class="profile-pic")
+          p #{user.displayName}
+          p ( #{user.email} )
+          a(href=`/dashboard/list/${list.id}/user/${user.id}/remove` class="align-right")
+            img(src="/images/remove-button.png" alt="Remove List User")
+  p Pending Invites
+  div.pending-invites-container
+    if invitations
+      each invitation in invitations
+        .pending-invite-container
+          img(src="/images/user.svg" alt="pending invite avatar" class="profile-pic")
+          p ( #{invitation.email} )
+          a(href=`/dashboard/list/${list.id}/invitation/${invitation.id}/remove` class="align-right")
+            img(src="/images/remove-button.png" alt="Remove Invitation")
+
+    else
+      p No Pending Invites

@@ -1,10 +1,13 @@
+const User = require("../models/User");
 const List = require("../models/List");
 const Item = require("../models/Item");
+const Invitation = require("../models/Invitation");
+const invitationController = require("../controllers/invitationController");
 
 const async = require("async");
 const { body, validationResult } = require("express-validator");
 
-// Dashboard display USER LISTS page on GET
+// Dashboard display USER LISTS on GET
 module.exports.user_lists = function (req, res, next) {
   List.find({ users: req.user.id }, "name")
     .sort({ name: 1 })
@@ -23,7 +26,7 @@ module.exports.user_lists = function (req, res, next) {
     });
 };
 
-// Dashboard create USER LIST page on GET
+// Dashboard create USER LIST on GET
 module.exports.list_create_get = (req, res, next) => {
   // Successful, so render.
   res.render("list_form", {
@@ -33,7 +36,7 @@ module.exports.list_create_get = (req, res, next) => {
   });
 };
 
-// Dashboard create USER LIST page on POST
+// Dashboard create USER LIST on POST
 exports.list_create_post = [
   // Validate and sanitize fields.
   body("name", "List name must be specified").trim().isLength({ min: 1 }),
@@ -73,7 +76,7 @@ exports.list_create_post = [
   },
 ];
 
-// Dashboard display USER LIST details page on GET
+// Dashboard display USER LIST details on GET
 exports.list_detail = (req, res, next) => {
   async.parallel(
     {
@@ -112,7 +115,7 @@ exports.list_detail = (req, res, next) => {
   );
 };
 
-// Dashboard edit USER LIST page on GET
+// Dashboard edit USER LIST on GET
 exports.list_edit_get = (req, res, next) => {
   List.findOne({ _id: req.params.id, users: req.user.id }).exec(function (
     err,
@@ -131,7 +134,7 @@ exports.list_edit_get = (req, res, next) => {
   });
 };
 
-// Dashboard edit USER LIST page on POST
+// Dashboard edit USER LIST on POST
 exports.list_edit_post = [
   // Validate and sanitize fields.
   body("name", "List name must be specified").trim().isLength({ min: 1 }),
@@ -178,7 +181,7 @@ exports.list_edit_post = [
   },
 ];
 
-// Dashboard delete USER LIST page on GET
+// Dashboard delete USER LIST on GET
 exports.list_delete_get = (req, res, next) => {
   async.parallel(
     {
@@ -206,7 +209,7 @@ exports.list_delete_get = (req, res, next) => {
   );
 };
 
-// Dashboard delete USER LIST page on POST
+// Dashboard delete USER LIST on POST
 exports.list_delete_post = (req, res, next) => {
   async.parallel(
     {
@@ -237,4 +240,153 @@ exports.list_delete_post = (req, res, next) => {
       });
     }
   );
+};
+
+// Dashboard display USER LIST SHARE on GET
+exports.list_share_get = (req, res, next) => {
+  async.parallel(
+    {
+      list(callback) {
+        List.findOne({ _id: req.params.id, users: req.user.id })
+          .populate("owner")
+          .populate("users")
+          .exec(callback);
+      },
+      invitations(callback) {
+        Invitation.find({ list: req.params.id }).exec(callback);
+      },
+    },
+    (err, results) => {
+      if (err) {
+        next(err);
+      }
+      // Success - render the list share form
+      res.render("list_share", {
+        title: "Share List - Grocery List App",
+        page_title: "Share List",
+        user: req.user,
+        list: results.list,
+        invitations: results.invitations,
+      });
+    }
+  );
+};
+
+// Dashboard add LIST USER on POST
+exports.list_add_user = [
+  // Validate and sanitize fields.
+  body("email")
+    .trim()
+    .isLength({ min: 1 })
+    .withMessage("Email must be specified")
+    .isEmail()
+    .withMessage("Input must be a valid email format"),
+  // Process request after validation and sanitization.
+  (req, res, next) => {
+    // Extract the validation errors from a request.
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      List.findOne({ _id: req.params.id, users: req.user.id })
+        .populate("owner")
+        .populate("users")
+        .exec(function (err, list) {
+          if (err) {
+            next(err);
+          }
+          // Re-Render the list share form with errors
+          res.render("list_share", {
+            title: "Share List - Grocery List App",
+            page_title: "Share List",
+            user: req.user,
+            list,
+            errors: errors.array(),
+          });
+        });
+    } else {
+      // If no validation errors
+      async.parallel(
+        {
+          // Try to find if user email exist in registered users list
+          user(callback) {
+            User.findOne({ email: req.body.email }).exec(callback);
+          },
+          list(callback) {
+            List.findOne({ _id: req.params.id, users: req.user.id })
+              .populate("owner")
+              .populate("users")
+              .exec(callback);
+          },
+        },
+        (err, results) => {
+          if (err) {
+            next(err);
+          }
+          // User is already registered in database
+          if (results.user) {
+            // Check if user is already in sharing list
+            for (let user of results.list.users) {
+              // User is in list
+              if (user.id === results.user.id) {
+                try {
+                  throw new Error("User already has access to list");
+                } catch (err) {
+                  // Re-Render the list share form with errors
+                  res.render("list_share", {
+                    title: "Share List - Grocery List App",
+                    page_title: "Share List",
+                    user: req.user,
+                    list: results.list,
+                    error: err,
+                  });
+                  return;
+                }
+              }
+            }
+            // User is not in sharing list
+            List.updateOne(
+              { _id: req.params.id, users: req.user.id },
+              { $push: { users: results.user._id } }
+            ).exec(function (err) {
+              if (err) {
+                next(err);
+              }
+              // Redirects to the list share page
+              res.redirect(`${results.list.url}/share`);
+            });
+          } else {
+            invitationController.list_add_invitation(req, res, next);
+          }
+        }
+      );
+    }
+  },
+];
+
+// Dashboard remove LIST USER on GET
+// SHOULD THE OWNER ONLY BE ABLE TO REMOVE USERS ????
+exports.list_remove_user = (req, res, next) => {
+  List.updateOne(
+    { _id: req.params.listId, users: req.user.id },
+    { $pull: { users: req.params.userId } }
+  ).exec(function (err) {
+    if (err) {
+      next(err);
+    }
+    // Check if current user is still a user of the current list
+    List.findOne({
+      _id: req.params.listId,
+      users: req.user.id,
+    }).exec(function (err, list) {
+      if (err) {
+        next(err);
+      }
+      if (list) {
+        // Redirects to the list share page
+        res.redirect(`/dashboard/list/${req.params.listId}/share`);
+      } else {
+        // Redirects to the user dashboard
+        res.redirect("/dashboard");
+      }
+    });
+  });
 };
