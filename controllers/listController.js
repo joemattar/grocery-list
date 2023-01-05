@@ -7,7 +7,7 @@ const invitationController = require("../controllers/invitationController");
 const async = require("async");
 const { body, validationResult } = require("express-validator");
 
-// Dashboard display USER LISTS page on GET
+// Dashboard display USER LISTS on GET
 module.exports.user_lists = function (req, res, next) {
   List.find({ users: req.user.id }, "name")
     .sort({ name: 1 })
@@ -26,7 +26,7 @@ module.exports.user_lists = function (req, res, next) {
     });
 };
 
-// Dashboard create USER LIST page on GET
+// Dashboard create USER LIST on GET
 module.exports.list_create_get = (req, res, next) => {
   // Successful, so render.
   res.render("list_form", {
@@ -36,7 +36,7 @@ module.exports.list_create_get = (req, res, next) => {
   });
 };
 
-// Dashboard create USER LIST page on POST
+// Dashboard create USER LIST on POST
 exports.list_create_post = [
   // Validate and sanitize fields.
   body("name", "List name must be specified").trim().isLength({ min: 1 }),
@@ -76,7 +76,7 @@ exports.list_create_post = [
   },
 ];
 
-// Dashboard display USER LIST details page on GET
+// Dashboard display USER LIST details on GET
 exports.list_detail = (req, res, next) => {
   async.parallel(
     {
@@ -115,7 +115,7 @@ exports.list_detail = (req, res, next) => {
   );
 };
 
-// Dashboard edit USER LIST page on GET
+// Dashboard edit USER LIST on GET
 exports.list_edit_get = (req, res, next) => {
   List.findOne({ _id: req.params.id, users: req.user.id }).exec(function (
     err,
@@ -134,7 +134,7 @@ exports.list_edit_get = (req, res, next) => {
   });
 };
 
-// Dashboard edit USER LIST page on POST
+// Dashboard edit USER LIST on POST
 exports.list_edit_post = [
   // Validate and sanitize fields.
   body("name", "List name must be specified").trim().isLength({ min: 1 }),
@@ -181,7 +181,7 @@ exports.list_edit_post = [
   },
 ];
 
-// Dashboard delete USER LIST page on GET
+// Dashboard delete USER LIST on GET
 exports.list_delete_get = (req, res, next) => {
   async.parallel(
     {
@@ -209,7 +209,7 @@ exports.list_delete_get = (req, res, next) => {
   );
 };
 
-// Dashboard delete USER LIST page on POST
+// Dashboard delete USER LIST on POST
 exports.list_delete_post = (req, res, next) => {
   async.parallel(
     {
@@ -242,7 +242,7 @@ exports.list_delete_post = (req, res, next) => {
   );
 };
 
-// Dashboard display USER LIST SHARE page on GET
+// Dashboard display USER LIST SHARE on GET
 exports.list_share_get = (req, res, next) => {
   async.parallel(
     {
@@ -363,7 +363,7 @@ exports.list_add_user = [
   },
 ];
 
-// Dashboard remove LIST USER page on GET
+// Dashboard remove LIST USER on GET
 exports.list_remove_user = (req, res, next) => {
   List.updateOne(
     { _id: req.params.listId, users: req.user.id },

@@ -12,7 +12,7 @@ module.exports.resolve_pending_invitations = function (req, res, next) {
   next();
 };
 
-// Dashboard add UNREGISTERED LIST USER on POST
+// Dashboard add UNREGISTERED LIST USER (invitation) on POST
 module.exports.list_add_invitation = function (req, res, next) {
   const listId = req.params.id;
   // Check if email is not already in registered users
@@ -54,4 +54,18 @@ module.exports.list_add_invitation = function (req, res, next) {
         });
       }
     });
+};
+
+// Dashboard remove UNREGISTERED LIST USER (invitation) on GET
+module.exports.list_remove_invitation = function (req, res, next) {
+  Invitation.deleteOne({
+    _id: req.params.invitationId,
+    list: req.params.listId,
+  }).exec(function (err) {
+    if (err) {
+      next(err);
+    }
+    // Redirects to the list share page
+    res.redirect(`/dashboard/list/${req.params.listId}/share`);
+  });
 };

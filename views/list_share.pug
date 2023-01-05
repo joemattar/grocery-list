@@ -35,7 +35,7 @@ block content
       each invitation in invitations
         .pending-invite-container
           p ( #{invitation.email} )
-          a(href=`/dashboard/list/${list.id}/invitastion/${invitation.id}/remove` class="align-right")
+          a(href=`/dashboard/list/${list.id}/invitation/${invitation.id}/remove` class="align-right")
             img(src="/images/remove-button.png" alt="Remove Invitation")
 
     else
