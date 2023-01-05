@@ -411,7 +411,7 @@ text-decoration: none;
   border-radius: 1rem;
 
   display: grid;
-  grid-template-columns: 1fr auto;
+  grid-template-columns: auto 1fr auto;
   align-items: center;
   gap: 1.5rem;
 

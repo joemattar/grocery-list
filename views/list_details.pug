@@ -7,7 +7,10 @@ block content
         img(src="/images/arrow-left-circle.svg" alt="Left Back Arrow")
       p #{list.name}
       div.list-users
-        img(src=list.owner.image alt="owner photo" class="profile-pic")
+        if list.owner.image
+          img(src=list.owner.image alt="owner photo" class="profile-pic")
+        else
+          img(src="/images/user.svg" alt="owner photo" class="profile-pic")
         a(href=`/dashboard/list/${list.id}/share`) Share
         img(src="/images/users.svg" alt="users sharing")
           

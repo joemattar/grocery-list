@@ -1,8 +1,6 @@
 const List = require("../models/List");
 const Invitation = require("../models/Invitation");
 
-const async = require("async");
-
 // Middleware that resolves all the pending invites for the invited user email
 module.exports.resolve_pending_invitations = function (req, res, next) {
   // Find all pending invitations related to current user
@@ -10,11 +8,8 @@ module.exports.resolve_pending_invitations = function (req, res, next) {
     if (err) {
       return next(err);
     }
-    console.log("INVITATIONS ARRAY - NEXT LINE:");
-    console.log(invitations);
     // If the user has pending invitation
     if (invitations.length > 0) {
-      console.log("INVITATIONS EXIST");
       // Add the current user as user in all the related invitation lists
       for (let invitation of invitations) {
         List.updateOne(
@@ -34,7 +29,6 @@ module.exports.resolve_pending_invitations = function (req, res, next) {
           });
         });
       }
-      // If the user does not have pending invitation
     }
   });
   next();

@@ -11,6 +11,8 @@ router.get(
   "/",
   isAuthorized,
   invitationController.resolve_pending_invitations,
+  // NEW REGISTERED USER CANNOT SEE SHARED LISTS UPON FIRST LOGIN
+  // NEW REGISTERED USER CANNOT SEE SHARED LISTS UPON FIRST LOGIN
   listController.user_lists
 );
 

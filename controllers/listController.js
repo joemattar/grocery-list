@@ -354,7 +354,6 @@ exports.list_add_user = [
               res.redirect(`${results.list.url}/share`);
             });
           } else {
-            console.log("USER IS NOT REGISTERED");
             invitationController.list_add_invitation(req, res, next);
           }
         }

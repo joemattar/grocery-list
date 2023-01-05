@@ -18,7 +18,10 @@ block content
       p=error
   p Owner
   div.owner-container
-    img(src=list.owner.image alt="owner photo" class="profile-pic")
+    if list.owner.image
+      img(src=list.owner.image alt="owner photo" class="profile-pic")
+    else
+      img(src="/images/user.svg" alt="owner photo" class="profile-pic")
     p #{list.owner.displayName}
     p ( #{list.owner.email} )
   p Users
@@ -26,7 +29,10 @@ block content
     each user in list.users
       if user.id !== list.owner.id
         div.user-container
-          img(src=user.image alt="user photo" class="profile-pic")
+          if user.image
+            img(src=user.image alt="user photo" class="profile-pic")
+          else
+            img(src="/images/user.svg" alt="user photo" class="profile-pic")
           p #{user.displayName}
           p ( #{user.email} )
           a(href=`/dashboard/list/${list.id}/user/${user.id}/remove` class="align-right")
@@ -36,6 +42,7 @@ block content
     if invitations
       each invitation in invitations
         .pending-invite-container
+          img(src="/images/user.svg" alt="pending invite avatar" class="profile-pic")
           p ( #{invitation.email} )
           a(href=`/dashboard/list/${list.id}/invitation/${invitation.id}/remove` class="align-right")
             img(src="/images/remove-button.png" alt="Remove Invitation")
