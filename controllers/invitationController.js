@@ -54,7 +54,4 @@ module.exports.list_add_invitation = function (req, res, next) {
         });
       }
     });
-  // ADD CODE
-  // ADD CODE
-  // ADD CODE
 };

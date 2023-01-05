@@ -1,6 +1,7 @@
 const User = require("../models/User");
 const List = require("../models/List");
 const Item = require("../models/Item");
+const Invitation = require("../models/Invitation");
 const invitationController = require("../controllers/invitationController");
 
 const async = require("async");
@@ -243,22 +244,32 @@ exports.list_delete_post = (req, res, next) => {
 
 // Dashboard display USER LIST SHARE page on GET
 exports.list_share_get = (req, res, next) => {
-  List.findOne({ _id: req.params.id, users: req.user.id })
-    .populate("owner")
-    .populate("users")
-    .exec(function (err, list) {
+  async.parallel(
+    {
+      list(callback) {
+        List.findOne({ _id: req.params.id, users: req.user.id })
+          .populate("owner")
+          .populate("users")
+          .exec(callback);
+      },
+      invitations(callback) {
+        Invitation.find({ list: req.params.id }).exec(callback);
+      },
+    },
+    (err, results) => {
       if (err) {
         next(err);
       }
-
       // Success - render the list share form
       res.render("list_share", {
         title: "Share List - Grocery List App",
         page_title: "Share List",
         user: req.user,
-        list,
+        list: results.list,
+        invitations: results.invitations,
       });
-    });
+    }
+  );
 };
 
 // Dashboard add LIST USER on POST

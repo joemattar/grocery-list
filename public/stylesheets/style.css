@@ -366,8 +366,6 @@ text-decoration: none;
 }
 
 .main .pending-invites-container {
-  background-color: #fbd4d1;
-
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -375,6 +373,31 @@ text-decoration: none;
 
   width: 100%;
 }
+
+.main .pending-invites-container .pending-invite-container {
+  background-color: #fbd4d1;
+
+  border-radius: 1rem;
+
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 1.5rem;
+
+  padding: 0.5rem;
+
+  width: Calc(100% - 2rem);
+}
+
+.main .pending-invites-container .pending-invite-container a {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.main .pending-invites-container img {
+  height: 1.25rem;
+} 
 
 .align-right {
   text-align: right;

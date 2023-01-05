@@ -31,4 +31,12 @@ block content
             img(src="/images/remove-button.png" alt="Remove List User")
   p Pending Invites
   div.pending-invites-container
-    p No Pending Invites
+    if invitations
+      each invitation in invitations
+        .pending-invite-container
+          p ( #{invitation.email} )
+          a(href=`/dashboard/list/${list.id}/invitastion/${invitation.id}/remove` class="align-right")
+            img(src="/images/remove-button.png" alt="Remove Invitation")
+
+    else
+      p No Pending Invites
