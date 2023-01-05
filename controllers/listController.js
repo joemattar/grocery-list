@@ -364,6 +364,7 @@ exports.list_add_user = [
 ];
 
 // Dashboard remove LIST USER on GET
+// SHOULD THE OWNER ONLY BE ABLE TO REMOVE USERS ????
 exports.list_remove_user = (req, res, next) => {
   List.updateOne(
     { _id: req.params.listId, users: req.user.id },
@@ -372,7 +373,21 @@ exports.list_remove_user = (req, res, next) => {
     if (err) {
       next(err);
     }
-    // Redirects to the list share page
-    res.redirect(`/dashboard/list/${req.params.listId}/share`);
+    // Check if current user is still a user of the current list
+    List.findOne({
+      _id: req.params.listId,
+      users: req.user.id,
+    }).exec(function (err, list) {
+      if (err) {
+        next(err);
+      }
+      if (list) {
+        // Redirects to the list share page
+        res.redirect(`/dashboard/list/${req.params.listId}/share`);
+      } else {
+        // Redirects to the user dashboard
+        res.redirect("/dashboard");
+      }
+    });
   });
 };

@@ -304,13 +304,44 @@ text-decoration: none;
   height: 1.25rem;
 }
 
+.main .share-container {
+  background-color: bisque;
+
+  border-radius: 1rem;
+
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 1.5rem;
+
+  padding: 0.5rem;
+
+  width: Calc(100% - 2rem);
+}
+
+.main .share-container a {
+  display: flex;
+  align-items: center;
+}
+
+.main .share-container img {
+  height: 1.5rem;
+}
+
+.main .share-container .add-user-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+
 .main .owner-container {
   background-color: #d0f4c1;
 
   border-radius: 1rem;
 
   display: grid;
-  grid-template-columns: auto auto 1fr auto;
+  grid-template-columns: auto auto 1fr;
   align-items: center;
   gap: 1.5rem;
 
