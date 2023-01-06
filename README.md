@@ -23,6 +23,7 @@
 - Form to add users by email
 - Registered users are automatically added to list users
 - Unregistered users are added to db as invitations
+- (Feature to send email invitations in progress)
 - Shows list owner info
 - Shows list users info
 - Users are removable
