@@ -1,5 +1,6 @@
 const List = require("../models/List");
 const Invitation = require("../models/Invitation");
+const mailer = require("../controllers/mailer");
 
 // Middleware that resolves all the pending invites for the invited user email
 module.exports.resolve_pending_invitations = function (req, res, next) {
@@ -71,6 +72,8 @@ module.exports.list_add_invitation = function (req, res, next) {
           if (err) {
             return next(err);
           }
+          // Successful: send an email to unregistered user
+          mailer(req.body.email);
           // Successful: redirect to new record.
           res.redirect(`/dashboard/list/${listId}/share`);
         });
